@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 72813414bc6a1e04fa4edb7b85afadf6
+guid: dc98a8250c71b2f44b40b8e316df9a07
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -7,18 +7,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material.002
-    second: {fileID: 2100000, guid: ffd1096ed7a36414e968b3179122836e, type: 2}
+      name: Material.001
+    second: {fileID: 2100000, guid: fb682093d9ad16b4f8d120007a4694bd, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: darkfor wind.001
-    second: {fileID: 2100000, guid: c07cc1aab62e7704fa76375c613057cf, type: 2}
+      name: darkfor wind
+    second: {fileID: 2100000, guid: 8e257226b4183cc4bbdd29b8dbcca7bc, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: house.001
-    second: {fileID: 2100000, guid: 929f6309aff902a408031905b3c5687a, type: 2}
+      name: house
+    second: {fileID: 2100000, guid: fb4eb8986a38e524d8e403bd75bc743d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
