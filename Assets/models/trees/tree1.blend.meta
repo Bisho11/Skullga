@@ -9,6 +9,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Trunk_1
     second: {fileID: 2100000, guid: f62adb343087cb849863067287c9ae35, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: fruit
+    second: {fileID: 2100000, guid: 501126e4030010049ab27a6e1b7570c4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
