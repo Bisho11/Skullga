@@ -10,6 +10,9 @@ public class JumpingState : State
     float jumpHeight;
     float playerSpeed;
 
+    float timePassed;
+    float landingTime;
+
     Vector3 airVelocity;
 
     public JumpingState(Character _character, StateMachine _stateMachine) : base(_character, _stateMachine)
@@ -22,6 +25,8 @@ public class JumpingState : State
     {
         base.Enter();
 
+        timePassed = 0f;
+
         grounded = false;
         gravityValue = character.gravityValue;
         jumpHeight = character.jumpHeight;
@@ -31,6 +36,7 @@ public class JumpingState : State
         character.animator.SetFloat("speed", 0);
         character.animator.SetTrigger("jump");
         Jump();
+        landingTime = 1.1f;
     }
     public override void HandleInput()
     {
@@ -43,11 +49,13 @@ public class JumpingState : State
     {
         base.LogicUpdate();
 
-        if (grounded)
+        if (timePassed > landingTime)
         {
             character.animator.SetTrigger("move");
             stateMachine.ChangeState(character.standing);
         }
+
+        timePassed += Time.deltaTime;
     }
 
     public override void PhysicsUpdate()
@@ -68,6 +76,10 @@ public class JumpingState : State
 
         gravityVelocity.y += gravityValue * Time.deltaTime;
         grounded = character.controller.isGrounded;
+
+        //fix rotation in air
+        Quaternion targetRotation = Quaternion.LookRotation(velocity);
+        character.transform.rotation = Quaternion.Slerp(character.transform.rotation, targetRotation, 0.8f);
     }
 
     void Jump()
