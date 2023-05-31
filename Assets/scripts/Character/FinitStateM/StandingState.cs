@@ -69,7 +69,20 @@ public class StandingState : State
     {
         base.LogicUpdate();
 
-        character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+        if (character.animator.GetFloat("speed") < 0.3 && input.magnitude > 0.1f)
+        { 
+            character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+        }
+
+        else if (character.animator.GetFloat("speed") > 0.4 && input.magnitude > 0.1f && !sprint)
+        {
+            character.animator.SetFloat("speed", -input.magnitude*(1/1000000), character.speedDampTime, Time.deltaTime);
+        }
+
+        if(input.magnitude < 0.1f)
+        {
+            character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+        }
 
         if (sprint)
         {
@@ -105,11 +118,18 @@ public class StandingState : State
             camRight.Normalize();
 
             velocity = camForward * input.y + camRight * input.x;
-            velocity.y = 0f;
+            //velocity.y = 0f;
             velocity.Normalize();
 
             // Apply speed to the movement
             velocity *= character.playerSpeed;
+
+            // Rotate the character towards the movement direction
+            if (velocity.sqrMagnitude > 0)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(velocity);
+                character.transform.rotation = Quaternion.Slerp(character.transform.rotation, targetRotation, character.rotationDampTime * Time.deltaTime);
+            }
         }
     }
 
@@ -134,6 +154,14 @@ public class StandingState : State
         }
         */
         character.controller.Move(velocity * Time.deltaTime);
+
+        // Rotate the character towards the movement direction
+        if (velocity.sqrMagnitude > 0)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(velocity);
+            character.transform.rotation = Quaternion.Slerp(character.transform.rotation, targetRotation,0.3f);
+        }
+
     }
 
     public override void Exit()
