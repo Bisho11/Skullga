@@ -625,14 +625,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319890580}
-  m_LocalRotation: {x: 0.00000012806488, y: 0.000000012240887, z: 0.7093484, w: 0.7048581}
-  m_LocalPosition: {x: -9.05, y: 0.29, z: -0}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 4.11, y: 0.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 968202735}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90.364}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!114 &319890582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,7 +646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponLength: 3
-  weaponDamage: 0.2
+  weaponDamage: 2
 --- !u!1 &324238952 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1d18e3c7973e9db45824e647030b6fd0, type: 3}
@@ -911,8 +911,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 6.25
-  m_Radius: 1.39
+  m_Height: 6.47
+  m_Radius: 1.84
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -989,6 +989,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 2137450236}
   weapon: {fileID: 488111098}
+--- !u!114 &680172082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680172071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33881fc55ab128f4e890195c28770697, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 5
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,7 +1801,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 2
+  m_StoppingDistance: 4
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1810,8 +1823,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   attackCD: 3
-  attackRange: 3.75
-  aggroRange: 11
+  attackRange: 4.05
+  aggroRange: 12.64
 --- !u!1 &1264354442
 GameObject:
   m_ObjectHideFlags: 0
