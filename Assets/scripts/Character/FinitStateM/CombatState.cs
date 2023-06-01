@@ -7,7 +7,9 @@ public class CombatState : State
     bool sheathWeapon;
     float playerSpeed;
     bool attack;
-    
+
+    bool sprint;
+
 
     Vector3 cVelocity;
 
@@ -21,6 +23,8 @@ public class CombatState : State
     {
         base.Enter();
 
+
+        sprint = false;
         sheathWeapon = false;
         input = Vector2.zero;
         currentVelocity = Vector3.zero;
@@ -37,6 +41,15 @@ public class CombatState : State
     {
         base.HandleInput();
 
+        if (sprintAction.triggered || input.sqrMagnitude == 0f)
+        {
+            sprint = false;
+        }
+        else
+        {
+            sprint = true;
+        }
+
         if (drawWeaponAction.triggered)
         {
             sheathWeapon = true;
@@ -48,10 +61,10 @@ public class CombatState : State
         }
 
         input = moveAction.ReadValue<Vector2>();
-        velocity = new Vector3(input.x, 0, input.y);
+        //velocity = new Vector3(input.x, 0, input.y);
 
-        velocity = velocity.x * character.cameraTransform.right.normalized + velocity.z * character.cameraTransform.forward.normalized;
-        velocity.y = 0f;
+        //velocity = velocity.x * character.cameraTransform.right.normalized + velocity.z * character.cameraTransform.forward.normalized;
+        //velocity.y = 0f;
 
     }
 
@@ -59,7 +72,27 @@ public class CombatState : State
     {
         base.LogicUpdate();
 
-        character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+        //character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+
+        if (character.animator.GetFloat("speed") < 0.3 && input.magnitude > 0.1f)
+        {
+            character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+        }
+        else if (sprint)
+        {
+            character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+        }
+
+        else if (character.animator.GetFloat("speed") > 0.4 && input.magnitude > 0.1f)
+        {
+            character.animator.SetFloat("speed", -input.magnitude * (1 / 1000000), character.speedDampTime, Time.deltaTime);
+        }
+
+        if (input.magnitude < 0.1f)
+        {
+            character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+        }
+
 
         if (sheathWeapon)
         {
@@ -74,6 +107,40 @@ public class CombatState : State
             character.animator.SetTrigger("attack");
             stateMachine.ChangeState(character.attacking);
         }
+
+
+        if (input.magnitude < 0.1f)
+        {
+            // Character has released input, set velocity to zero
+            velocity = Vector3.zero;
+        }
+
+        else
+        {
+            // Calculate movement direction based on camera
+            Vector3 camForward = character.cameraTransform.forward;
+            camForward.y = 0f;
+            camForward.Normalize();
+
+            Vector3 camRight = character.cameraTransform.right;
+            camRight.y = 0f;
+            camRight.Normalize();
+
+            velocity = camForward * input.y + camRight * input.x;
+            //velocity.y = 0f;
+            velocity.Normalize();
+
+            // Apply speed to the movement
+            velocity *= (character.playerSpeed + character.sprintSpeed);
+
+            // Rotate the character towards the movement direction
+            if (velocity.sqrMagnitude > 0)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(velocity);
+                character.transform.rotation = Quaternion.Slerp(character.transform.rotation, targetRotation, character.rotationDampTime * Time.deltaTime);
+            }
+        }
+
     }
 
     public override void PhysicsUpdate()
@@ -88,12 +155,21 @@ public class CombatState : State
             gravityVelocity.y = 0f;
         }
 
-        currentVelocity = Vector3.SmoothDamp(currentVelocity, velocity, ref cVelocity, character.velocityDampTime);
+        /*currentVelocity = Vector3.SmoothDamp(currentVelocity, velocity, ref cVelocity, character.velocityDampTime);
         character.controller.Move(currentVelocity * Time.deltaTime * playerSpeed + gravityVelocity * Time.deltaTime);
 
         if (velocity.sqrMagnitude > 0)
         {
             character.transform.rotation = Quaternion.Slerp(character.transform.rotation, Quaternion.LookRotation(velocity), character.rotationDampTime);
+        }*/
+
+        character.controller.Move(velocity * Time.deltaTime);
+
+        // Rotate the character towards the movement direction
+        if (velocity.sqrMagnitude > 0)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(velocity);
+            character.transform.rotation = Quaternion.Slerp(character.transform.rotation, targetRotation, 0.8f);
         }
 
     }

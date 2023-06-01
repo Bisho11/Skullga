@@ -153,7 +153,7 @@ public class StandingState : State
             character.transform.rotation = Quaternion.Slerp(character.transform.rotation, Quaternion.LookRotation(velocity), character.rotationDampTime);
         }
         */
-        character.controller.Move(velocity * Time.deltaTime);
+        character.controller.Move(velocity * Time.deltaTime + gravityVelocity * Time.deltaTime);
 
         // Rotate the character towards the movement direction
         if (velocity.sqrMagnitude > 0)
