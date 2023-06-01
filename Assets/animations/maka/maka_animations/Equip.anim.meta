@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/animations/maka/maka_animations/Idle.anim.meta
-guid: e90a235078d36ee4fab326845997c4bd
-========
-guid: 8b334f7eca44c3a47aa269689d742e45
->>>>>>>> Attack:Assets/animations/maka/maka_animations/Equip.anim.meta
+guid: 426043a709cfc4b48bdc5ee111c5e28c
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 7400000
