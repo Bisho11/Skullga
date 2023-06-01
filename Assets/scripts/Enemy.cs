@@ -7,15 +7,14 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] float health = 3;
 
-    GameObject player;
-    Animator animator;
-    NavMeshAgent agent;
-
     [Header("Combat")]
     [SerializeField] float attackCD = 3f;
     [SerializeField] float attackRange = 1f;
     [SerializeField] float aggroRange = 4f;
 
+    GameObject player;
+    Animator animator;
+    NavMeshAgent agent;
     float timePassed;
     float newDestinationCD = 0.5f;
 
