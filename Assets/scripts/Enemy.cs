@@ -68,6 +68,15 @@ public class Enemy : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    public void StartDealDamage()
+    {
+        GetComponentInChildren<EnemyDamageDealer>().StartDealDamage();
+    }
+    public void EndDealDamage()
+    {
+        GetComponentInChildren<EnemyDamageDealer>().EndDealDamage();
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
