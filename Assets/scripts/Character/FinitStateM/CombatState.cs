@@ -1,20 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-public class StandingState : State
+public class CombatState : State
 {
     float gravityValue;
-    bool jump;
     Vector3 currentVelocity;
     bool grounded;
-    bool sprint;
+    bool sheathWeapon;
     float playerSpeed;
-    bool drawWeapon;
+    bool attack;
+
+    bool sprint;
+
 
     Vector3 cVelocity;
 
-    public StandingState(Character _character, StateMachine _stateMachine) : base(_character, _stateMachine)
+    public CombatState(Character _character, StateMachine _stateMachine) : base(_character, _stateMachine)
     {
         character = _character;
         stateMachine = _stateMachine;
@@ -24,37 +23,41 @@ public class StandingState : State
     {
         base.Enter();
 
-        drawWeapon = false;
-        jump = false;
+
         sprint = false;
+        sheathWeapon = false;
         input = Vector2.zero;
-        velocity = Vector3.zero;    
         currentVelocity = Vector3.zero;
         gravityVelocity.y = 0;
+        attack = false;
 
+        velocity = character.playerVelocity;
         playerSpeed = character.playerSpeed;
         grounded = character.controller.isGrounded;
         gravityValue = character.gravityValue;
     }
 
-
     public override void HandleInput()
     {
         base.HandleInput();
 
-        if (jumpAction.triggered)
+        if (sprintAction.triggered || input.sqrMagnitude == 0f)
         {
-            jump = true;
+            sprint = false;
         }
-        
-        if (sprintAction.triggered)
+        else
         {
             sprint = true;
         }
 
         if (drawWeaponAction.triggered)
         {
-            drawWeapon = true;
+            sheathWeapon = true;
+        }
+
+        if (attackAction.triggered)
+        {
+            attack = true;
         }
 
         input = moveAction.ReadValue<Vector2>();
@@ -69,43 +72,49 @@ public class StandingState : State
     {
         base.LogicUpdate();
 
+        //character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
+
         if (character.animator.GetFloat("speed") < 0.3 && input.magnitude > 0.1f)
-        { 
+        {
             character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
         }
-
-        else if (character.animator.GetFloat("speed") > 0.4 && input.magnitude > 0.1f && !sprint)
-        {
-            character.animator.SetFloat("speed", -input.magnitude*(1/1000000), character.speedDampTime, Time.deltaTime);
-        }
-
-        if(input.magnitude < 0.1f)
+        else if (sprint)
         {
             character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
         }
 
-        if (sprint)
+        else if (character.animator.GetFloat("speed") > 0.4 && input.magnitude > 0.1f)
         {
-            stateMachine.ChangeState(character.sprinting);
-        }
-        if (jump)
-        {
-            stateMachine.ChangeState(character.jumping);
+            character.animator.SetFloat("speed", -input.magnitude * (1 / 1000000), character.speedDampTime, Time.deltaTime);
         }
 
-        if (drawWeapon)
+        if (input.magnitude < 0.1f)
         {
-            stateMachine.ChangeState(character.combatting);
-            character.animator.SetTrigger("drawWeapon");
-            drawWeapon = false;
+            character.animator.SetFloat("speed", input.magnitude, character.speedDampTime, Time.deltaTime);
         }
+
+
+        if (sheathWeapon)
+        {
+            character.animator.SetTrigger("sheathWeapon");
+            stateMachine.ChangeState(character.standing);
+            sheathWeapon = false;
+            
+        }
+
+        if (attack)
+        {
+            character.animator.SetTrigger("attack");
+            stateMachine.ChangeState(character.attacking);
+        }
+
 
         if (input.magnitude < 0.1f)
         {
             // Character has released input, set velocity to zero
             velocity = Vector3.zero;
         }
-      
+
         else
         {
             // Calculate movement direction based on camera
@@ -122,7 +131,7 @@ public class StandingState : State
             velocity.Normalize();
 
             // Apply speed to the movement
-            velocity *= character.playerSpeed;
+            velocity *= (character.playerSpeed + character.sprintSpeed);
 
             // Rotate the character towards the movement direction
             if (velocity.sqrMagnitude > 0)
@@ -131,6 +140,7 @@ public class StandingState : State
                 character.transform.rotation = Quaternion.Slerp(character.transform.rotation, targetRotation, character.rotationDampTime * Time.deltaTime);
             }
         }
+
     }
 
     public override void PhysicsUpdate()
@@ -144,22 +154,22 @@ public class StandingState : State
         {
             gravityVelocity.y = 0f;
         }
-        /*
-        currentVelocity = Vector3.SmoothDamp(currentVelocity, velocity, ref cVelocity, character.velocityDampTime);
+
+        /*currentVelocity = Vector3.SmoothDamp(currentVelocity, velocity, ref cVelocity, character.velocityDampTime);
         character.controller.Move(currentVelocity * Time.deltaTime * playerSpeed + gravityVelocity * Time.deltaTime);
 
         if (velocity.sqrMagnitude > 0)
         {
             character.transform.rotation = Quaternion.Slerp(character.transform.rotation, Quaternion.LookRotation(velocity), character.rotationDampTime);
-        }
-        */
-        character.controller.Move(velocity * Time.deltaTime + gravityVelocity * Time.deltaTime);
+        }*/
+
+        character.controller.Move(velocity * Time.deltaTime);
 
         // Rotate the character towards the movement direction
         if (velocity.sqrMagnitude > 0)
         {
             Quaternion targetRotation = Quaternion.LookRotation(velocity);
-            character.transform.rotation = Quaternion.Slerp(character.transform.rotation, targetRotation,0.3f);
+            character.transform.rotation = Quaternion.Slerp(character.transform.rotation, targetRotation, 0.8f);
         }
 
     }
@@ -175,5 +185,7 @@ public class StandingState : State
         {
             character.transform.rotation = Quaternion.LookRotation(velocity);
         }
+
     }
+
 }
