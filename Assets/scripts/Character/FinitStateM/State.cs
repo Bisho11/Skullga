@@ -28,12 +28,12 @@ public class State
         jumpAction = character.playerInput.actions["Jump"];
         sprintAction = character.playerInput.actions["Sprint"];
         drawWeaponAction = character.playerInput.actions["DrawWeapon"];
-        attackAction = character.playerInput.actions["Attack1"];
+        attackAction = character.playerInput.actions["Attack"];
     }
 
     public virtual void Enter()
     {
-        Debug.Log("enter state: " + this.ToString());
+        //Debug.Log("enter state: " + this.ToString());
     }
 
     public virtual void HandleInput()

@@ -4,15 +4,25 @@ using UnityEngine;
 
 public class EquipementSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] GameObject weaponHolder;
+    [SerializeField] GameObject weapon;
+    
+
+
+    GameObject currentWeaponInHand;
+    
     void Start()
     {
-        
+        currentWeaponInHand = Instantiate(weapon, weaponHolder.transform);
     }
 
-    // Update is called once per frame
-    void Update()
+   
+    public void StartDealDamage()
     {
-        
+        currentWeaponInHand.GetComponentInChildren<DamageDealer>().StartDealDamage();
+    }
+    public void EndDealDamage()
+    {
+        currentWeaponInHand.GetComponentInChildren<DamageDealer>().EndDealDamage();
     }
 }

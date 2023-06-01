@@ -7,6 +7,7 @@ public class CombatState : State
     bool sheathWeapon;
     float playerSpeed;
     bool attack;
+    
 
     Vector3 cVelocity;
 
@@ -68,11 +69,11 @@ public class CombatState : State
             
         }
 
-       /* if (attack)
+        if (attack)
         {
             character.animator.SetTrigger("attack");
             stateMachine.ChangeState(character.attacking);
-        }*/
+        }
     }
 
     public override void PhysicsUpdate()
