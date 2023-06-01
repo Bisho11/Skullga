@@ -15,6 +15,8 @@ public class State
     public InputAction moveAction;
     public InputAction jumpAction;
     public InputAction sprintAction;
+    public InputAction drawWeaponAction;
+    public InputAction attackAction;
 
 
     public State(Character _character, StateMachine _stateMachine)
@@ -25,12 +27,13 @@ public class State
         moveAction = character.playerInput.actions["Move"];
         jumpAction = character.playerInput.actions["Jump"];
         sprintAction = character.playerInput.actions["Sprint"];
-
+        drawWeaponAction = character.playerInput.actions["DrawWeapon"];
+        attackAction = character.playerInput.actions["Attack"];
     }
 
     public virtual void Enter()
     {
-        Debug.Log("enter state: " + this.ToString());
+        //Debug.Log("enter state: " + this.ToString());
     }
 
     public virtual void HandleInput()

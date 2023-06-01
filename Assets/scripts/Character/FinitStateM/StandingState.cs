@@ -10,6 +10,7 @@ public class StandingState : State
     bool grounded;
     bool sprint;
     float playerSpeed;
+    bool drawWeapon;
 
     Vector3 cVelocity;
 
@@ -23,10 +24,11 @@ public class StandingState : State
     {
         base.Enter();
 
+        drawWeapon = false;
         jump = false;
         sprint = false;
         input = Vector2.zero;
-        velocity = Vector3.zero;
+        velocity = Vector3.zero;    
         currentVelocity = Vector3.zero;
         gravityVelocity.y = 0;
 
@@ -48,6 +50,11 @@ public class StandingState : State
         if (sprintAction.triggered)
         {
             sprint = true;
+        }
+
+        if (drawWeaponAction.triggered)
+        {
+            drawWeapon = true;
         }
 
         input = moveAction.ReadValue<Vector2>();
@@ -86,12 +93,19 @@ public class StandingState : State
             stateMachine.ChangeState(character.jumping);
         }
 
+        if (drawWeapon)
+        {
+            stateMachine.ChangeState(character.combatting);
+            character.animator.SetTrigger("drawWeapon");
+            drawWeapon = false;
+        }
+
         if (input.magnitude < 0.1f)
         {
             // Character has released input, set velocity to zero
             velocity = Vector3.zero;
         }
-
+      
         else
         {
             // Calculate movement direction based on camera
