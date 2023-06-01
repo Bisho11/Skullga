@@ -29,6 +29,7 @@ public class State
         sprintAction = character.playerInput.actions["Sprint"];
         drawWeaponAction = character.playerInput.actions["DrawWeapon"];
         attackAction = character.playerInput.actions["Attack"];
+        
     }
 
     public virtual void Enter()

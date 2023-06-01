@@ -29,9 +29,14 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        if(player == null)
+        {
+            return;
+        }
+
         animator.SetFloat("speed", agent.velocity.magnitude / agent.speed);
 
-        if (timePassed >= attackCD)
+        if (timePassed >= attackCD )
         {
             if (Vector3.Distance(player.transform.position, transform.position) <= attackRange)
             {
