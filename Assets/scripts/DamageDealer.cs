@@ -24,8 +24,9 @@ public class DamageDealer : MonoBehaviour
             int layerMask = 1 << 9;
             if (Physics.Raycast(transform.position, -transform.up, out hit, weaponLength, layerMask))
             {
-                if  (!hasDealtDamage.Contains(hit.transform.gameObject))
+                if  (hit.transform.TryGetComponent(out Enemy enemy) &&  !hasDealtDamage.Contains(hit.transform.gameObject))
                 {
+                    enemy.TakeDamage(weaponDamage);
                     print("damage") ;
                     hasDealtDamage.Add(hit.transform.gameObject);
                 }
@@ -36,12 +37,12 @@ public class DamageDealer : MonoBehaviour
     {
         canDealDamage = true;
         hasDealtDamage.Clear();
-        Debug.Log("starts to deal dmg");
+        //Debug.Log("starts to deal dmg");
     }
-    public void EndDealDamage()
+    public void EndDealDamage() 
     {
         canDealDamage = false;
-        Debug.Log("ending to deal dmg");
+        //Debug.Log("ending to deal dmg");
     }
 
     private void OnDrawGizmos()
