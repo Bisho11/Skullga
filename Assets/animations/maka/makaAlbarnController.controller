@@ -110,7 +110,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Jump
-  m_Speed: 0.75
+  m_Speed: 0.74
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 989785667441767728}
