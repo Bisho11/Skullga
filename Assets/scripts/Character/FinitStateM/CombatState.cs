@@ -23,6 +23,7 @@ public class CombatState : State
     {
         base.Enter();
 
+        character.weapon.SetActive(true);
 
         sprint = false;
         sheathWeapon = false;
@@ -40,6 +41,8 @@ public class CombatState : State
     public override void HandleInput()
     {
         base.HandleInput();
+
+        
 
         if (sprintAction.triggered || input.sqrMagnitude == 0f)
         {

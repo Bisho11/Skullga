@@ -5,7 +5,7 @@ using UnityEngine;
 public class HealthSystem : MonoBehaviour
 
 {
-    [SerializeField] float health = 5;
+    public float health = 3;
    
 
     Animator animator;
@@ -17,12 +17,13 @@ public class HealthSystem : MonoBehaviour
     public void TakeDamage(float damageAmount)
     {
         health -= damageAmount;
+        Debug.Log(health);
         animator.SetTrigger("damage");
         
 
         if (health <= 0)
         {
-            Die();
+            animator.SetTrigger("death");
         }
     }
 

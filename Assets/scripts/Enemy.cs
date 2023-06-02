@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] float health = 3;
+    [SerializeField] float health = 1;
 
     [Header("Combat")]
     [SerializeField] float attackCD = 3f;
@@ -29,25 +29,28 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        animator.SetFloat("speed", agent.velocity.magnitude / agent.speed);
-
-        if (timePassed >= attackCD)
+        if (health > 0)
         {
-            if (Vector3.Distance(player.transform.position, transform.position) <= attackRange)
+            animator.SetFloat("speed", agent.velocity.magnitude / agent.speed);
+
+            if (timePassed >= attackCD)
             {
-                animator.SetTrigger("attack");
-                timePassed = 0;
+                if (Vector3.Distance(player.transform.position, transform.position) <= attackRange)
+                {
+                    animator.SetTrigger("attack");
+                    timePassed = 0;
+                }
             }
-        }
-        timePassed += Time.deltaTime;
+            timePassed += Time.deltaTime;
 
-        if (newDestinationCD <= 0 && Vector3.Distance(player.transform.position, transform.position) <= aggroRange)
-        {
-            newDestinationCD = 0.5f;
-            agent.SetDestination(player.transform.position);
+            if (newDestinationCD <= 0 && Vector3.Distance(player.transform.position, transform.position) <= aggroRange)
+            {
+                newDestinationCD = 0.5f;
+                agent.SetDestination(player.transform.position);
+            }
+            newDestinationCD -= Time.deltaTime;
+            transform.LookAt(player.transform);
         }
-        newDestinationCD -= Time.deltaTime;
-        transform.LookAt(player.transform);
     }
 
     
@@ -59,7 +62,8 @@ public class Enemy : MonoBehaviour
 
         if (health <= 0)
         {
-            Die();
+
+            animator.SetTrigger("death");
         }
     }
 

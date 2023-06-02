@@ -12,6 +12,7 @@ public class Character : MonoBehaviour
     public float jumpHeight = 0.8f;
     public float gravityMultiplier = 2;
     public float rotationSpeed = 5f;
+    public GameObject weapon;
 
     [Header("Animation Smoothing")]
     [Range(0, 1)]
