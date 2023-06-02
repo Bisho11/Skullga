@@ -9,20 +9,21 @@ public class EquipementSystem : MonoBehaviour
     
 
 
-    GameObject currentWeaponInHand;
     
     void Start()
     {
-        currentWeaponInHand = Instantiate(weapon, weaponHolder.transform);
+    
     }
 
    
     public void StartDealDamage()
     {
-        currentWeaponInHand.GetComponentInChildren<DamageDealer>().StartDealDamage();
+        weapon.GetComponentInChildren<DamageDealer>().StartDealDamage();
+        Debug.Log("Fuck");
     }
     public void EndDealDamage()
     {
-        currentWeaponInHand.GetComponentInChildren<DamageDealer>().EndDealDamage();
+        weapon.GetComponentInChildren<DamageDealer>().EndDealDamage();
+
     }
 }
