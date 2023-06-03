@@ -16,10 +16,13 @@ TagManager:
   - 
   - Player
   - Enemy
-  - 
+  - ragdoll
   - 
   - 
   - Ground
+  - 
+  - invisible
+  - 
   - 
   - 
   - 
