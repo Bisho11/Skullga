@@ -35,6 +35,7 @@ public class Character : MonoBehaviour
     public float gravityValue = -9.81f;
     [HideInInspector]
     public CharacterController controller;
+
     [HideInInspector]
     public PlayerInput playerInput;
     [HideInInspector]
@@ -83,4 +84,9 @@ public class Character : MonoBehaviour
     {
         movementSM.currentState.PhysicsUpdate();
     }
+    public void DisableComponent()
+    {
+        playerInput.enabled = false;
+    }
 }
+

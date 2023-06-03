@@ -17,10 +17,12 @@ public class Enemy : MonoBehaviour
     NavMeshAgent agent;
     float timePassed;
     float newDestinationCD = 0.5f;
+    bool dead;
 
 
     void Start()
     {
+        dead = false;
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
@@ -57,13 +59,18 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float damageAmount)
     {
-        health -= damageAmount; 
-        animator.SetTrigger("damage");
+        
+        health -= damageAmount;
+        if (health > 0)
+        {
+            animator.SetTrigger("damage");
+        }
 
-        if (health <= 0)
+        else if (!dead)
         {
 
             animator.SetTrigger("death");
+            dead = true;
         }
     }
 
