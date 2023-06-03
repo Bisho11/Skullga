@@ -89,7 +89,7 @@ public class StandingState : State
         {
             stateMachine.ChangeState(character.sprinting);
         }
-        if (jump)
+        if (jump && character.controller.isGrounded)
         {
             stateMachine.ChangeState(character.jumping);
         }

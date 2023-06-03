@@ -36,7 +36,7 @@ public class Clicked : MonoBehaviour,IPointerDownHandler,IPointerUpHandler
 
     public void ChangeScene()
     {
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("AmineScene");
     }
 
     public void Exit() {
