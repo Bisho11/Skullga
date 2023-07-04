@@ -12,7 +12,7 @@ public class Character : MonoBehaviour
     public float jumpHeight = 0.8f;
     public float gravityMultiplier = 2;
     public float rotationSpeed = 5f;
-    public bool untargetable =false ;
+    public GameObject weapon;
 
     [Header("Animation Smoothing")]
     [Range(0, 1)]
@@ -30,12 +30,12 @@ public class Character : MonoBehaviour
     public SprintState sprinting;
     public CombatState combatting;
     public AttackState attacking;
-    
 
     [HideInInspector]
     public float gravityValue = -9.81f;
     [HideInInspector]
     public CharacterController controller;
+
     [HideInInspector]
     public PlayerInput playerInput;
     [HideInInspector]
@@ -62,7 +62,6 @@ public class Character : MonoBehaviour
         sprinting = new SprintState(this, movementSM);
         combatting = new CombatState(this, movementSM);
         attacking = new AttackState(this, movementSM);
-        
 
         movementSM.Initialize(standing);
 
@@ -85,4 +84,9 @@ public class Character : MonoBehaviour
     {
         movementSM.currentState.PhysicsUpdate();
     }
+    public void DisableComponent()
+    {
+        playerInput.enabled = false;
+    }
 }
+

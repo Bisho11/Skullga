@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -33,4 +34,12 @@ public class Clicked : MonoBehaviour,IPointerDownHandler,IPointerUpHandler
         Debug.Log("chilling");
     }
 
+    public void ChangeScene()
+    {
+        SceneManager.LoadScene("AmineScene");
+    }
+
+    public void Exit() {
+        Application.Quit();
+    }
 }

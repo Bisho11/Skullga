@@ -5,34 +5,35 @@ using UnityEngine;
 public class HealthSystem : MonoBehaviour
 
 {
-    [SerializeField] float health = 5;
-    [SerializeField] GameObject ragdoll;
-    
-
-
+    bool dead = false;
+    public float health = 3;
+    Character charac;
     Animator animator;
     void Start()
     {
         animator = GetComponent<Animator>();
+        charac = GetComponent<Character>();
     }
 
     public void TakeDamage(float damageAmount)
     {
         health -= damageAmount;
-        animator.SetTrigger("damage");
-        
-
-        if (health <= 0)
+        Debug.Log(health);
+        if (health > 0)
         {
-            
-            Instantiate(ragdoll, transform.position, transform.rotation);
-            Die();
+            animator.SetTrigger("damage");
+        }
+
+        else if (!dead)
+        {
+            dead = true;
+            animator.SetTrigger("death");
+            charac.DisableComponent();
         }
     }
 
     void Die()
     {
-        
         Destroy(this.gameObject);
     }
    

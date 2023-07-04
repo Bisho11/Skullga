@@ -25,6 +25,7 @@ public class StandingState : State
         base.Enter();
 
         drawWeapon = false;
+        character.weapon.SetActive(false);
         jump = false;
         sprint = false;
         input = Vector2.zero;
@@ -88,7 +89,7 @@ public class StandingState : State
         {
             stateMachine.ChangeState(character.sprinting);
         }
-        if (jump)
+        if (jump && character.controller.isGrounded)
         {
             stateMachine.ChangeState(character.jumping);
         }
@@ -153,7 +154,7 @@ public class StandingState : State
             character.transform.rotation = Quaternion.Slerp(character.transform.rotation, Quaternion.LookRotation(velocity), character.rotationDampTime);
         }
         */
-        character.controller.Move(velocity * Time.deltaTime + gravityVelocity * Time.deltaTime);
+        character.controller.Move(velocity * Time.deltaTime + gravityVelocity * Time.deltaTime * character.gravityMultiplier);
 
         // Rotate the character towards the movement direction
         if (velocity.sqrMagnitude > 0)

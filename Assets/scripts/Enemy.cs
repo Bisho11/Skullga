@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] float health = 3;
+    [SerializeField] float health = 1;
 
     [Header("Combat")]
     [SerializeField] float attackCD = 3f;
@@ -17,10 +17,12 @@ public class Enemy : MonoBehaviour
     NavMeshAgent agent;
     float timePassed;
     float newDestinationCD = 0.5f;
+    bool dead;
 
 
     void Start()
     {
+        dead = false;
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
@@ -29,42 +31,46 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if(player == null)
+        if (health > 0)
         {
-            return;
-        }
+            animator.SetFloat("speed", agent.velocity.magnitude / agent.speed);
 
-        animator.SetFloat("speed", agent.velocity.magnitude / agent.speed);
-
-        if (timePassed >= attackCD )
-        {
-            if (Vector3.Distance(player.transform.position, transform.position) <= attackRange)
+            if (timePassed >= attackCD)
             {
-                animator.SetTrigger("attack");
-                timePassed = 0;
+                if (Vector3.Distance(player.transform.position, transform.position) <= attackRange)
+                {
+                    animator.SetTrigger("attack");
+                    timePassed = 0;
+                }
             }
-        }
-        timePassed += Time.deltaTime;
+            timePassed += Time.deltaTime;
 
-        if (newDestinationCD <= 0 && Vector3.Distance(player.transform.position, transform.position) <= aggroRange)
-        {
-            newDestinationCD = 0.5f;
-            agent.SetDestination(player.transform.position);
+            if (newDestinationCD <= 0 && Vector3.Distance(player.transform.position, transform.position) <= aggroRange)
+            {
+                newDestinationCD = 0.5f;
+                agent.SetDestination(player.transform.position);
+            }
+            newDestinationCD -= Time.deltaTime;
+            transform.LookAt(player.transform);
         }
-        newDestinationCD -= Time.deltaTime;
-        transform.LookAt(player.transform);
     }
 
     
 
     public void TakeDamage(float damageAmount)
     {
-        health -= damageAmount; 
-        animator.SetTrigger("damage");
-
-        if (health <= 0)
+        
+        health -= damageAmount;
+        if (health > 0)
         {
-            Die();
+            animator.SetTrigger("damage");
+        }
+
+        else if (!dead)
+        {
+
+            animator.SetTrigger("death");
+            dead = true;
         }
     }
 

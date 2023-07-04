@@ -23,6 +23,7 @@ public class CombatState : State
     {
         base.Enter();
 
+        character.weapon.SetActive(true);
 
         sprint = false;
         sheathWeapon = false;
@@ -40,6 +41,8 @@ public class CombatState : State
     public override void HandleInput()
     {
         base.HandleInput();
+
+        
 
         if (sprintAction.triggered || input.sqrMagnitude == 0f)
         {
@@ -163,7 +166,7 @@ public class CombatState : State
             character.transform.rotation = Quaternion.Slerp(character.transform.rotation, Quaternion.LookRotation(velocity), character.rotationDampTime);
         }*/
 
-        character.controller.Move(velocity * Time.deltaTime);
+        character.controller.Move(velocity * Time.deltaTime + gravityVelocity * Time.deltaTime * character.gravityMultiplier);
 
         // Rotate the character towards the movement direction
         if (velocity.sqrMagnitude > 0)
